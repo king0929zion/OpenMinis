@@ -2,7 +2,11 @@ name: Android APK
 
 on:
   push:
+    branches:
+      - main
   pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency:
@@ -120,18 +124,26 @@ jobs:
           "$APKSIGNER" verify --verbose "$APK"
 
           # A successful Gradle task is not enough for OpenMinis: the Linux
-          # sandbox must actually be present in the produced APK.
-          ZIP_LIST="$(unzip -Z1 "$APK")"
+          # sandbox must actually be present in the produced APK. Store the
+          # archive listing in a file first so `set -o pipefail` cannot turn a
+          # successful early grep match into a false SIGPIPE failure.
+          APK_LIST="$RUNNER_TEMP/openminis-apk-files.txt"
+          unzip -Z1 "$APK" > "$APK_LIST"
           for required in \
             "assets/proot-aarch64" \
             "assets/alpine-minirootfs.tar.gz" \
             "lib/arm64-v8a/libproot.so" \
             "lib/arm64-v8a/libproot-loader.so" \
             "lib/arm64-v8a/libproot-loader32.so"; do
-            echo "$ZIP_LIST" | grep -Fx "$required" >/dev/null || {
+            if ! grep -Fxq "$required" "$APK_LIST"; then
               echo "Missing required APK payload: $required" >&2
+              echo "Nearby archive entries:" >&2
+              grep -E '(^assets/.*(proot|alpine)|^lib/arm64-v8a/libproot)' "$APK_LIST" >&2 || true
               exit 1
-            }
+            fi
+            size="$(unzip -p "$APK" "$required" | wc -c)"
+            test "$size" -gt 0
+            echo "Verified payload: $required ($size bytes)"
           done
 
           mkdir -p dist
