@@ -161,6 +161,10 @@ dependencies {
     implementation(composeBom)
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
+    // Lucide's official icon artwork packaged as Android VectorDrawables.
+    // Existing Material icons stay temporarily for untouched legacy screens;
+    // redesigned surfaces use Lucide resources exclusively.
+    implementation("com.composables:icons-lucide-android:2.2.1")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
@@ -196,7 +200,6 @@ dependencies {
     // native .so payloads for ONNX Runtime and the APM — see the abiFilters
     // note in `ndk`; we ship arm64-v8a only.
     implementation("com.github.helloooideeeeea:RealTimeCutVADLibraryForAndroid:1.0.5@aar")
-
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:okhttp-sse:4.12.0")
