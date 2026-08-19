@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -18,29 +19,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 
-// Material3 ButtonDefaults.MinHeight = 40dp; tuned to 48dp for touch
-// ergonomics on phones. IconButton family is unaffected (icon-sized).
-val MinisButtonHeight = 48.dp
+val MinisButtonHeight = 50.dp
+val MinisSmallButtonHeight = 36.dp
 
-// Compact button height for actions embedded inside section cards
-// (e.g. "Sign out" inside a credentials card, "Set Bearer Token" inside
-// a token section). Visually subordinate to MinisButtonHeight (48dp)
-// which remains the size for primary screen actions ("Add Custom Model",
-// TopAppBar Save, AlertDialog confirm).
-val MinisSmallButtonHeight = 32.dp
+private val PillShape = RoundedCornerShape(999.dp)
+private val SmallButtonContentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
 
-private val SmallButtonContentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp)
-
+/**
+ * Primary button primitive for the monochrome UI.
+ * No stroke and no elevation are used; contrast is entirely tonal.
+ */
 @Composable
 fun MinisButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.shape,
+    shape: Shape = PillShape,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
-    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 22.dp, vertical = 10.dp),
     interactionSource: MutableInteractionSource? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -51,23 +49,27 @@ fun MinisButton(
         shape = shape,
         colors = colors,
         elevation = elevation,
-        border = border,
+        border = null,
         contentPadding = contentPadding,
         interactionSource = interactionSource ?: remember { MutableInteractionSource() },
         content = content,
     )
 }
 
+/**
+ * Legacy "outlined" API kept for call-site compatibility. Visually it is now
+ * a flat tonal pill, because this fork intentionally does not use strokes.
+ */
 @Composable
 fun MinisOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.outlinedShape,
-    colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
+    shape: Shape = PillShape,
+    colors: ButtonColors = ButtonDefaults.filledTonalButtonColors(),
     elevation: ButtonElevation? = null,
-    border: BorderStroke? = ButtonDefaults.outlinedButtonBorder(enabled = enabled),
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    border: BorderStroke? = null,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 22.dp, vertical = 10.dp),
     interactionSource: MutableInteractionSource? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -77,8 +79,8 @@ fun MinisOutlinedButton(
         enabled = enabled,
         shape = shape,
         colors = colors,
-        elevation = elevation,
-        border = border,
+        elevation = null,
+        border = null,
         contentPadding = contentPadding,
         interactionSource = interactionSource ?: remember { MutableInteractionSource() },
         content = content,
@@ -90,7 +92,7 @@ fun MinisTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.textShape,
+    shape: Shape = PillShape,
     colors: ButtonColors = ButtonDefaults.textButtonColors(),
     elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
@@ -104,25 +106,22 @@ fun MinisTextButton(
         enabled = enabled,
         shape = shape,
         colors = colors,
-        elevation = elevation,
-        border = border,
+        elevation = null,
+        border = null,
         contentPadding = contentPadding,
         interactionSource = interactionSource ?: remember { MutableInteractionSource() },
         content = content,
     )
 }
 
-// defaultMinSize is also pinned at MinisSmallButtonHeight so Material3's
-// internal 40dp floor (ButtonDefaults.MinHeight) doesn't override the
-// heightIn modifier and keep the button at 40dp.
 @Composable
 fun MinisSmallButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.shape,
+    shape: Shape = PillShape,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
-    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
     contentPadding: PaddingValues = SmallButtonContentPadding,
     interactionSource: MutableInteractionSource? = null,
@@ -136,8 +135,8 @@ fun MinisSmallButton(
         enabled = enabled,
         shape = shape,
         colors = colors,
-        elevation = elevation,
-        border = border,
+        elevation = null,
+        border = null,
         contentPadding = contentPadding,
         interactionSource = interactionSource ?: remember { MutableInteractionSource() },
         content = content,
@@ -149,10 +148,10 @@ fun MinisSmallOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.outlinedShape,
-    colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
+    shape: Shape = PillShape,
+    colors: ButtonColors = ButtonDefaults.filledTonalButtonColors(),
     elevation: ButtonElevation? = null,
-    border: BorderStroke? = ButtonDefaults.outlinedButtonBorder(enabled = enabled),
+    border: BorderStroke? = null,
     contentPadding: PaddingValues = SmallButtonContentPadding,
     interactionSource: MutableInteractionSource? = null,
     content: @Composable RowScope.() -> Unit,
@@ -165,8 +164,8 @@ fun MinisSmallOutlinedButton(
         enabled = enabled,
         shape = shape,
         colors = colors,
-        elevation = elevation,
-        border = border,
+        elevation = null,
+        border = null,
         contentPadding = contentPadding,
         interactionSource = interactionSource ?: remember { MutableInteractionSource() },
         content = content,
@@ -178,7 +177,7 @@ fun MinisSmallTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.textShape,
+    shape: Shape = PillShape,
     colors: ButtonColors = ButtonDefaults.textButtonColors(),
     elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
@@ -194,8 +193,8 @@ fun MinisSmallTextButton(
         enabled = enabled,
         shape = shape,
         colors = colors,
-        elevation = elevation,
-        border = border,
+        elevation = null,
+        border = null,
         contentPadding = contentPadding,
         interactionSource = interactionSource ?: remember { MutableInteractionSource() },
         content = content,

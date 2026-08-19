@@ -2,10 +2,11 @@ package com.openminis.app.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,101 +18,46 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 /**
- * Single source of truth for Settings section-card visual rhythm.
- * Mirror of iOS SwiftUI Form / List grouped style; the values below are
- * derived from the iOS reference screenshot and its pixel measurements.
+ * Shared settings layout for the monochrome redesign.
  *
- * All Settings screens (ProviderDetail / MountedFolders / MountDetail /
- * ModelGroups / EnvironmentVariables / etc.) MUST consume from this
- * object rather than hard-coding values inline. When a value changes
- * here every screen updates atomically.
+ * Cards are intentionally borderless and flat. The extra-large radius and
+ * neutral surface steps provide grouping without separators or strokes.
  */
 object SectionDesign {
-    /** Outer column padding from screen edge. iOS UIKit insets.left/.right = 16. */
     val ScreenHorizontalPadding = 16.dp
-
-    /** Card corner radius. iOS UITableViewCell rounded section uses ~10pt. */
-    val CardShape = RoundedCornerShape(12.dp)
-
-    /** Distance from screen top → first section header. */
-    val FirstSectionTopGap = 16.dp
-
-    /** Distance from previous section's footer → next section header. */
-    val SectionTopGap = 24.dp
-
-    /** Distance from a section header → its card. */
-    val HeaderToCardGap = 8.dp
-
-    /** Distance from card → its footer caption. */
-    val CardToFooterGap = 8.dp
-
-    /** Distance between adjacent rows / cards inside the same section
-     *  (e.g. mount list rows). iOS uses no gap with internal dividers
-     *  but Android's surfaceContainer color contrast is weaker so keep
-     *  a tight 8dp visual break. */
-    val InterRowGap = 8.dp
-
-    /** Standard row height inside a card. iOS row ≈ 44pt. */
-    val RowMinHeight = 44.dp
-
-    /** [T-android-settings-ui-md3] #3 Single-line text-field min height. MD3
-     *  text fields are 56dp; the section rows were normalized to the same 56dp
-     *  so an input field lines up with the toggle/value rows around it instead
-     *  of reading as the old ~44/24dp mix. Kept separate from [RowMinHeight] so
-     *  dropdowns / plain rows that intentionally sit tighter are unaffected. */
+    val CardShape = RoundedCornerShape(28.dp)
+    val FirstSectionTopGap = 18.dp
+    val SectionTopGap = 26.dp
+    val HeaderToCardGap = 10.dp
+    val CardToFooterGap = 10.dp
+    val InterRowGap = 6.dp
+    val RowMinHeight = 52.dp
     val TextFieldMinHeight = 56.dp
+    val RowHorizontalPadding = 18.dp
+    val RowVerticalPadding = 12.dp
+    val CardInnerVerticalPadding = 8.dp
 
-    /** Horizontal padding inside the card (from card-inner-edge to row content). */
-    val RowHorizontalPadding = 16.dp
+    // Kept for source compatibility. The redesigned UI does not draw dividers.
+    val DividerThickness = 0.dp
+    val DividerStartInset = 0.dp
 
-    /** Vertical padding inside a row (top + bottom each). */
-    val RowVerticalPadding = 10.dp
-
-    /** Vertical padding wrapping the inner Column of a [SectionCard], so the
-     *  first/last row don't hug the card's top/bottom edge. iOS Settings
-     *  reserves a small gap here even though row dividers stay flush. */
-    val CardInnerVerticalPadding = 6.dp
-
-    /** Inner-card divider thickness. */
-    val DividerThickness = 0.5.dp
-
-    /** Inner-card divider left inset (so it tucks under content text rather
-     *  than touching the card edge — matches iOS). */
-    val DividerStartInset = 16.dp
-
-    /** Card background — match iOS pure surface (white in light, near-black in dark).
-     *  T313 follow-up: The app theme deliberately overrides Material3 semantics —
-     *  `surface` is the page-level grouped background (gray / black) while
-     *  `surfaceContainerLow` is the brighter card foreground. Using
-     *  `surfaceContainerLow` here gives us the card color iOS Settings expects. */
     @Composable
     @ReadOnlyComposable
     fun cardColor(): Color = MaterialTheme.colorScheme.surfaceContainerLow
 
-    /** Section background (the gray behind the cards) — match iOS systemGroupedBackground.
-     *  Pairs with [cardColor]: this token is the dimmer page-level surface
-     *  (`background` = light gray / near-black), so cards painted in
-     *  `surfaceContainerLow` stand out against it. */
     @Composable
     @ReadOnlyComposable
     fun screenBackgroundColor(): Color = MaterialTheme.colorScheme.background
 
-    /** Inner-card divider color — match iOS systemFill α 0.3. */
     @Composable
     @ReadOnlyComposable
-    fun dividerColor(): Color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+    fun dividerColor(): Color = Color.Transparent
 
-    /** Footer caption color (gray text below cards). */
     @Composable
     @ReadOnlyComposable
     fun footerColor(): Color = MaterialTheme.colorScheme.onSurfaceVariant
 }
 
-/**
- * Section title above a card. iOS reference uses 17pt SemiBold sentence-case
- * onSurface — bigger and more present than Material's labelMedium ALL CAPS
- * onSurfaceVariant which fades into the background.
- */
 @Composable
 fun SectionHeader(
     text: String,
@@ -123,16 +69,13 @@ fun SectionHeader(
         fontWeight = FontWeight.SemiBold,
         color = MaterialTheme.colorScheme.onSurface,
         modifier = modifier.padding(
-            start = SectionDesign.ScreenHorizontalPadding,
-            end = SectionDesign.ScreenHorizontalPadding,
+            start = SectionDesign.ScreenHorizontalPadding + 4.dp,
+            end = SectionDesign.ScreenHorizontalPadding + 4.dp,
             bottom = SectionDesign.HeaderToCardGap,
         ),
     )
 }
 
-/**
- * Footer caption below a card. iOS reference uses 13pt secondary onSurfaceVariant.
- */
 @Composable
 fun SectionFooter(
     text: String,
@@ -143,20 +86,13 @@ fun SectionFooter(
         style = MaterialTheme.typography.bodySmall,
         color = SectionDesign.footerColor(),
         modifier = modifier.padding(
-            start = SectionDesign.ScreenHorizontalPadding,
-            end = SectionDesign.ScreenHorizontalPadding,
+            start = SectionDesign.ScreenHorizontalPadding + 4.dp,
+            end = SectionDesign.ScreenHorizontalPadding + 4.dp,
             top = SectionDesign.CardToFooterGap,
         ),
     )
 }
 
-/**
- * Container for one or more rows in a settings section. Replaces ad-hoc
- * Surface(surfaceContainerLow, RoundedCornerShape(12.dp)) call sites that
- * each pick their own color / shape / padding. Pass child rows; they get
- * the card background + corner clipping and divide themselves with
- * [SectionDivider] when stacked.
- */
 @Composable
 fun SectionCard(
     modifier: Modifier = Modifier,
@@ -165,6 +101,8 @@ fun SectionCard(
     Surface(
         color = SectionDesign.cardColor(),
         shape = SectionDesign.CardShape,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = SectionDesign.ScreenHorizontalPadding),
@@ -176,36 +114,16 @@ fun SectionCard(
     }
 }
 
-/** Divider between rows inside a [SectionCard]. */
+/**
+ * Compatibility replacement for legacy row dividers. A tiny breathing gap is
+ * used instead of a visible line so call sites retain their rhythm without a
+ * stroke.
+ */
 @Composable
 fun SectionDivider() {
-    HorizontalDivider(
-        modifier = Modifier.padding(start = SectionDesign.DividerStartInset),
-        thickness = SectionDesign.DividerThickness,
-        color = SectionDesign.dividerColor(),
-    )
+    Spacer(Modifier.height(2.dp))
 }
 
-/**
- * Inline label placed directly above a [SectionTextField] (or
- * [SectionDropdown]) when several labelled fields share a section but
- * each row needs its own short caption — too small a scope for a full
- * [SectionHeader]. Used by ModelEntryDetail / AddCustomModel /
- * AddProvider for fields like "Model ID" / "Display Name" / "Context Window".
- *
- * The previous `label =` slot on [SectionTextField] used Material3's
- * floating-label DecorationBox, but the row's tight `RowVerticalPadding`
- * (10dp) leaves no headroom — input glyphs overlap the floating label.
- * iOS Form puts every label outside its cell, so we follow the same
- * pattern: render the caption with this composable, then drop the
- * field below it.
- *
- * Horizontal padding is 0: callsites place this inside [SettingsCardBlock]
- * (or a manually padded Column) which already adds the 16dp inset. Adding
- * our own 16dp on top would double-indent the label relative to sibling
- * SectionHeader / description text / radio rows — see T353. Mirrors
- * SectionTextField's contentPadding=0 from T352.
- */
 @Composable
 fun RowLabel(
     text: String,
@@ -214,7 +132,8 @@ fun RowLabel(
     Text(
         text = text,
         style = MaterialTheme.typography.labelSmall,
+        fontWeight = FontWeight.Medium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = modifier.padding(bottom = 6.dp),
+        modifier = modifier.padding(bottom = 7.dp),
     )
 }
