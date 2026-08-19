@@ -124,27 +124,47 @@ jobs:
           "$APKSIGNER" verify --verbose "$APK"
 
           # A successful Gradle task is not enough for OpenMinis: the Linux
-          # sandbox must actually be present in the produced APK. Store the
-          # archive listing in a file first so `set -o pipefail` cannot turn a
-          # successful early grep match into a false SIGPIPE failure.
+          # sandbox must actually be present in the produced APK.
           APK_LIST="$RUNNER_TEMP/openminis-apk-files.txt"
           unzip -Z1 "$APK" > "$APK_LIST"
-          for required in \
-            "assets/proot-aarch64" \
-            "assets/alpine-minirootfs.tar.gz" \
-            "lib/arm64-v8a/libproot.so" \
-            "lib/arm64-v8a/libproot-loader.so" \
-            "lib/arm64-v8a/libproot-loader32.so"; do
+
+          verify_payload() {
+            local required="$1"
             if ! grep -Fxq "$required" "$APK_LIST"; then
               echo "Missing required APK payload: $required" >&2
-              echo "Nearby archive entries:" >&2
-              grep -E '(^assets/.*(proot|alpine)|^lib/arm64-v8a/libproot)' "$APK_LIST" >&2 || true
-              exit 1
+              return 1
             fi
+            local size
             size="$(unzip -p "$APK" "$required" | wc -c)"
             test "$size" -gt 0
             echo "Verified payload: $required ($size bytes)"
+          }
+
+          verify_payload "assets/proot-aarch64"
+          verify_payload "lib/arm64-v8a/libproot.so"
+          verify_payload "lib/arm64-v8a/libproot-loader.so"
+          verify_payload "lib/arm64-v8a/libproot-loader32.so"
+
+          # AAPT commonly gunzips assets ending in .gz during packaging and
+          # stores this rootfs as alpine-minirootfs.tar. RootfsManager already
+          # opens .tar.gz first and falls back to .tar, so CI verifies either
+          # runtime-supported representation, including non-zero payload bytes.
+          ROOTFS_ASSET=""
+          for candidate in \
+            "assets/alpine-minirootfs.tar.gz" \
+            "assets/alpine-minirootfs.tar"; do
+            if grep -Fxq "$candidate" "$APK_LIST"; then
+              ROOTFS_ASSET="$candidate"
+              break
+            fi
           done
+          if [ -z "$ROOTFS_ASSET" ]; then
+            echo "Missing Alpine rootfs in APK" >&2
+            echo "Nearby archive entries:" >&2
+            grep -E '(^assets/.*(proot|alpine)|^lib/arm64-v8a/libproot)' "$APK_LIST" >&2 || true
+            exit 1
+          fi
+          verify_payload "$ROOTFS_ASSET"
 
           mkdir -p dist
           cp "$APK" "$DIST_APK"
