@@ -15,6 +15,7 @@ permissions:
 env:
   APK_PATH: src/android/app/build/outputs/apk/debug/app-debug.apk
   DIST_APK: dist/OpenMinis-latest.apk
+  NDK_VERSION: 28.0.12433566
 
 jobs:
   build-apk:
@@ -52,9 +53,9 @@ jobs:
             "platforms;android-36" \
             "build-tools;36.0.0" \
             "cmake;3.22.1" \
-            "ndk;28.0.13004108"
-          echo "ANDROID_NDK_HOME=${ANDROID_SDK_ROOT}/ndk/28.0.13004108" >> "$GITHUB_ENV"
-          test -x "${ANDROID_SDK_ROOT}/ndk/28.0.13004108/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android26-clang"
+            "ndk;${NDK_VERSION}"
+          echo "ANDROID_NDK_HOME=${ANDROID_SDK_ROOT}/ndk/${NDK_VERSION}" >> "$GITHUB_ENV"
+          test -x "${ANDROID_SDK_ROOT}/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android26-clang"
 
       - name: Install host dependencies
         shell: bash
