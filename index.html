@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>OpenMinis · Android</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f3f3f4;
+      --surface: #ffffff;
+      --surface-2: #e9e9eb;
+      --text: #111113;
+      --muted: #71717a;
+      --button: #111113;
+      --button-text: #fafafa;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #09090b;
+        --surface: #18181b;
+        --surface-2: #27272a;
+        --text: #fafafa;
+        --muted: #a1a1aa;
+        --button: #fafafa;
+        --button-text: #09090b;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    main {
+      width: min(100%, 620px);
+      display: grid;
+      gap: 14px;
+    }
+    .hero {
+      background: var(--surface);
+      border-radius: 38px;
+      padding: clamp(28px, 7vw, 52px);
+    }
+    .icon {
+      width: 92px;
+      height: 92px;
+      display: block;
+      margin-bottom: 32px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 10vw, 72px);
+      line-height: .95;
+      letter-spacing: -.055em;
+      font-weight: 720;
+    }
+    .lead {
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.65;
+      max-width: 38em;
+    }
+    .download {
+      margin-top: 34px;
+      min-height: 62px;
+      border-radius: 999px;
+      padding: 0 24px;
+      background: var(--button);
+      color: var(--button-text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 650;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .download:hover { opacity: .86; }
+    .download:active { transform: scale(.985); }
+    .download svg { width: 20px; height: 20px; }
+    .meta {
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 18px 22px;
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .meta strong { color: var(--text); font-weight: 600; }
+    .links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .links a { color: var(--muted); text-decoration: none; }
+    .links a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <svg class="icon" viewBox="0 0 264 264" fill="none" aria-label="OpenMinis icon" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50.5315 3.44571C56.494 -1.14857 64.7894 -1.14857 70.7519 3.44571L85.738 14.9921C86.8923 15.881 88.158 16.6145 89.5018 17.1723L106.963 24.4208C113.909 27.3039 118.057 34.5114 117.073 41.9888L114.599 60.7837C114.409 62.2311 114.409 63.6967 114.599 65.1441L117.073 83.9404C118.057 91.4136 113.909 98.6232 106.963 101.51L89.5018 108.754C88.158 109.316 86.8923 110.045 85.738 110.933L70.7519 122.479C64.7894 127.073 56.494 127.073 50.5315 122.479L35.5454 110.933C34.391 110.045 33.1254 109.316 31.7815 108.754L14.3208 101.51C7.37407 98.6232 3.2264 91.4136 4.21058 83.9404L6.68452 65.1441C6.87541 63.6967 6.87541 62.2311 6.68452 60.7837L4.21058 41.9888C3.2264 34.5114 7.37407 27.3039 14.3208 24.4208L31.7815 17.1723C33.1254 16.6145 34.391 15.881 35.5454 14.9921L50.5315 3.44571Z" fill="#F6B704"/>
+        <path d="M160.386 103.612C140.544 83.7669 140.544 51.5915 160.386 31.7466L177.252 14.8837C197.094 -4.96122 229.271 -4.96122 249.119 14.8837C268.96 34.7286 268.96 66.904 249.119 86.7489L232.252 103.612C212.41 123.457 180.234 123.457 160.386 103.612Z" fill="#E54335"/>
+        <path d="M120.407 203.796C120.407 170.547 93.4528 143.593 60.2034 143.593C26.954 143.593 0 170.547 0 203.796C0 237.046 26.954 264 60.2034 264C93.4528 264 120.407 237.046 120.407 203.796Z" fill="#34A353"/>
+        <path d="M147.553 192.022C137.035 167.801 161.619 143.218 185.839 153.737L189.846 155.477C197.236 158.689 205.633 158.689 213.029 155.477L217.031 153.737C241.257 143.218 265.835 167.801 255.316 192.022L253.576 196.026C250.369 203.421 250.369 211.817 253.576 219.211L255.316 223.216C265.835 247.437 241.257 272.02 217.031 261.5L213.029 259.761C205.633 256.549 197.236 256.549 189.846 259.761L185.839 261.5C161.619 272.02 137.035 247.437 147.553 223.216L149.293 219.211C152.506 211.817 152.506 203.421 149.293 196.026L147.553 192.022Z" fill="#4280EF"/>
+      </svg>
+
+      <h1>OpenMinis<br />for Android</h1>
+      <p class="lead">黑白灰、平面化、大圆角的 OpenMinis Android 构建。下方按钮始终指向 GitHub Actions 已验证通过的最新 APK。</p>
+
+      <a class="download" href="https://github.com/king0929zion/OpenMinis/releases/download/ci-latest/OpenMinis-latest.apk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>
+        </svg>
+        一键下载最新 APK
+      </a>
+    </section>
+
+    <section class="meta">
+      <div><strong>架构</strong> · arm64-v8a</div>
+      <div id="build"><strong>版本</strong> · 正在读取最新构建信息…</div>
+      <div class="links">
+        <a href="https://github.com/king0929zion/OpenMinis">GitHub 仓库</a>
+        <a href="https://github.com/king0929zion/OpenMinis/actions">构建记录</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    fetch('https://api.github.com/repos/king0929zion/OpenMinis/releases/tags/ci-latest')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        const asset = (data.assets || []).find(a => a.name === 'OpenMinis-latest.apk');
+        const size = asset ? `${(asset.size / 1024 / 1024).toFixed(1)} MB` : 'APK';
+        const date = data.published_at ? new Date(data.published_at).toLocaleString('zh-CN') : '最新';
+        document.getElementById('build').innerHTML = `<strong>最新构建</strong> · ${size} · ${date}`;
+      })
+      .catch(() => {
+        document.getElementById('build').innerHTML = '<strong>最新构建</strong> · GitHub Actions 已验证 APK';
+      });
+  </script>
+</body>
+</html>
